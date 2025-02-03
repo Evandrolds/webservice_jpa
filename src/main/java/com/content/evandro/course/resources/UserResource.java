@@ -1,5 +1,6 @@
 package com.content.evandro.course.resources;
 
+import com.content.evandro.course.models.Product;
 import com.content.evandro.course.models.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +21,12 @@ public class UserResource {
         User u = new User(1L,"Sandro","sandro@hotmail.com","11983753453","123456");
         return ResponseEntity.ok(u);
     }
+    @GetMapping(value = "/products")
+    public ResponseEntity<Product> findAllComputadores(){
+        Product u = new Product(1L,"Comutador","Computador descktop",3000.4,"/items/computadores");
+        return ResponseEntity.ok(u);
+    }
+
     @PostMapping("/save")
     public ResponseEntity<User> saveUsers(@RequestBody User user){
         URI uri = URI.create("/users/save");
