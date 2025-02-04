@@ -2,6 +2,9 @@ package com.content.evandro.course.resources;
 
 import com.content.evandro.course.models.Product;
 import com.content.evandro.course.models.User;
+import com.content.evandro.course.repositories.UserRepository;
+import com.content.evandro.course.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,20 +20,20 @@ import java.util.Optional;
 @RequestMapping("/users")
 public class UserResource {
 
-    @GetMapping(value = "/findall")
-    public ResponseEntity<User> findAll(){
-        User u = new User(1L,"Sandro","sandro@hotmail.com","11983753453","123456");
-        return ResponseEntity.ok(u);
+    private final UserService service;
+
+    @Autowired
+    public UserResource( UserService service){
+        this.service= service;
     }
-    @GetMapping(value = "/products")
-    public ResponseEntity<Product> findAllComputadores(){
-        Product u = new Product(1L,"Comutador","Computador descktop",3000.4,"/items/computadores");
-        return ResponseEntity.ok(u);
+
+    @GetMapping(value = "/findall")
+    public ResponseEntity<List<User>> findAll(){
+        return ResponseEntity.ok(service.findAllUsers());
     }
 
     @PostMapping("/save")
-    public ResponseEntity<User> saveUsers(@RequestBody User user){
-        URI uri = URI.create("/users/save");
-        return ResponseEntity.created(uri).body(user);
+    public ResponseEntity<String> saveUsers(@RequestBody User user){
+        return new ResponseEntity<>(service.saveUser(user),HttpStatus.CREATED);
     }
 }
